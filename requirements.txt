@@ -1,0 +1,4 @@
+dash==1.16.0
+pyplan-core==0.1.23
+pandas==0.25.3
+gunicorn==20.0.4
