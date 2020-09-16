@@ -8,34 +8,11 @@ def default_layout(fig):
     fig.update_layout(template='plotly_white', margin=dict(
         l=80, r=80, b=5, t=60, pad=0), colorway=default_colors)
 
-def read_source_code(filename):
-    f = open(os.path.abspath(filename),'r')
-    allcode = f.read().replace("\n","""
-    """)
-    source_code=f"""
-    ```py
-    {allcode}
-    ```
-    """
-    f.close()
-    return source_code
-
-
-def createRangeSliderMarks(pyplan, node_id):
-    """Return marks created from selector"""
-    options_list = list(pyplan.getResult(node_id).options)
-    marks=dict()
-    for nn,item in enumerate(options_list):
-        marks[nn] = str(item) if nn==0 or nn==len(options_list)-1 else ""
-        
-    return marks
-
-def createDashSelectorOptions(pyplan, node_id):
+def createDashSelectorOptions(options):
     """Create dash objector for use in selector options"""
-    options_list = list(pyplan.getResult(node_id).options)
     dash_options = [
-        {"label": str(option), "value": options_list.index(option)}
-        for option in options_list
+        {"label": str(option), "value": options.index(option)}
+        for option in options
     ]
     return dash_options
     
