@@ -87,13 +87,14 @@
     .one.column,
     .one.columns                    { width: 4.82%; }
     .two.columns                    { width: 13.66%; }
-    .three.columns                  { width: 24.33%;            }
+    .threet.columns                  { width: 24.33%; }
+    .three.columns                  { width: 32.65%;  }
     .four.columns                   { width: 31.11%; }
     .five.columns                   { width: 39.73%; }
-    .six.columns                    { width: 48.33%;            }
+    .six.columns                    { width: 48.33%; }
     .seven.columns                  { width: 56.84%; }
     .eight.columns                  { width: 67.66%; }
-    .nine.columns                   { width: 74.22%;          }
+    .nine.columns                   { width: 74.22%; }
     .ten.columns                    { width: 82.86%; }
     .eleven.columns                 { width: 91.41%; }
     .twelve.columns                 { width: 100%; margin-left: 0; }

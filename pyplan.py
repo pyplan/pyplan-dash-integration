@@ -55,9 +55,9 @@ class Pyplan(object):
 
     def setSelectorValue(self, node_id, value):
         res = requests.post(
-            f'{self.pyplan_host}/api/dashboardManager/setSelectorValue/', data={"nodeId": node_id, "value": value}, headers={'Authorization': f"Token {self.token}", "session-key": self.session_key})
+            f'{self.pyplan_host}/api/modelManager/setSelectorValue/', json={"nodeId": node_id, "value": value}, headers={'Authorization': f"Token {self.token}", "session-key": self.session_key})
         res.raise_for_status()
-        return res.json()
+        return res.text
 
         
             
