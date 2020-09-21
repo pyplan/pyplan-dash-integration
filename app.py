@@ -38,16 +38,6 @@ def serve_layout():
         dcc.Store(id="node_status"),
         html.Div(
             [
-                html.Div(html.Img(
-                    src=app.get_asset_url("dash-logo.png"),
-                    id="plotly-image",
-                    style={
-                        "height": "60px",
-                        "width": "auto",
-                    }), className="threet columns"),
-                html.H2(
-                    "Dash/Pyplan Integration",
-                    className="text-center six columns"),
                 html.Div(
                     html.A(
                         html.Img(
@@ -58,6 +48,19 @@ def serve_layout():
                             "width": "auto",
                         }), href='https://www.pyplan.org', target='_blank')
                     
+                    , className="threet columns"),
+                html.H2(
+                    "Pyplan/Dash Integration",
+                    className="text-center six columns"),
+                html.Div(
+                    html.A(
+                        html.Img(
+                        src=app.get_asset_url("dash-logo.png"),
+                        id="plotly-image",
+                        style={
+                            "height": "60px",
+                            "width": "auto",
+                        }), href='https://plotly.com/dash/', target='_blank')
                     , className="threet columns text-right"),
             ]),
         html.Div(

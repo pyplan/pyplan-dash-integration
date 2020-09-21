@@ -2,7 +2,7 @@ import requests
 from time import sleep
 
 class Pyplan(object):
-    """Class for comunicate with pyplan via rest api"""
+    """Class for communicate with Pyplan rest api"""
 
     def __init__(self, pyplan_host):
         self.pyplan_host = pyplan_host
