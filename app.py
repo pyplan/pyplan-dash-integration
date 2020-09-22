@@ -91,59 +91,6 @@ def serve_layout():
                     ], id='pyplan-container', style={'height':'800px'})
 
             ], className="row"),
-        html.Div(
-            [
-
-                html.H6("Scenario selector:"),
-
-                html.Div(
-                    [
-                        html.Div(
-                            [
-                                html.P(
-                                    "Discount", className="selector_label first"),
-                                dcc.RadioItems(
-                                    id="discount_selector",
-                                    options=[{'label': 'No Discount', 'value': 0},
-                                            {'label': 'Selective', 'value': 1},
-                                            {'label': 'All 25', 'value': 2}],
-                                    value = 1,
-                                    labelStyle={'display': 'inline-block',
-                                                'marginRight': '10px'}
-                                ),
-                            ], className="three columns box"),
-
-                        html.Div(
-                            [
-                                html.P("Stock Policy",
-                                       className="selector_label first"),
-                                dcc.RadioItems(
-                                    id="stock_policy_selector",
-                                    options=[{'label': 'No Stock', 'value': 0},
-                                            {'label': 'Minimum', 'value': 1},
-                                            {'label': 'Summer', 'value': 2}],
-                                    value = 1,
-                                    labelStyle={'display': 'inline-block',
-                                                'marginRight': '10px'}
-                                ),
-                            ], className="three columns box"),
-
-                        html.Div(
-                            [
-                                html.P(
-                                    "Cost", className="selector_label first"),
-                                dcc.RadioItems(
-                                    id="cost_sel_scenario",
-                                    options=[{'label': 'Base', 'value': 0},
-                                            {'label': 'Pesimistic', 'value': 1},
-                                            {'label': 'Optimistic', 'value': 2}],
-                                    value = 1,
-                                    labelStyle={'display': 'inline-block',
-                                                'marginRight': '10px'}
-                                ),
-                            ], className="three columns box")
-                    ])
-            ], className="row"),
 
         html.H6('Profit and Loss Statement:'),
 
@@ -207,8 +154,7 @@ app.layout = serve_layout
 
 
 @app.callback(
-    [#Output("pyplan-ui", "src"),
-    Output("pyplan-container","children"),
+    [Output("pyplan-container","children"),
      Output("status-check", "disabled"),
      Output("progress", "value"),
      Output("progress", "hidden"),
@@ -240,8 +186,8 @@ def update_pyplan_status(n_intervals, session_id):
 )
 def check_pyplan_status(n_intervals, session_id):
     if session_id in pyplan_sessions and pyplan_sessions[session_id].is_ready():
-        nodes_to_refresh = pyplan_sessions[session_id].getStatus(['p_l_report'])
-        return [True if 'p_l_report' in nodes_to_refresh else dash.no_update]
+        nodes_to_refresh = pyplan_sessions[session_id].getStatus(['p_l_report_for_dash'])
+        return [True if 'p_l_report_for_dash' in nodes_to_refresh else dash.no_update]
     return [dash.no_update]
 
 
@@ -250,33 +196,16 @@ def check_pyplan_status(n_intervals, session_id):
     [Output('pl_table', 'columns'), Output(
         "pl_table", "data"), Output("pl_chart", "figure")],
     [Input('node_status', 'data'),
-     Input('discount_selector', 'value'),
-     Input('stock_policy_selector', 'value'),
-     Input('cost_sel_scenario', 'value'),
      State('session-id', 'children'),
      ]
-
 )
-def selects_callback(node_status, discount_value, stock_value, cost_value, session_id):
+def selects_callback(node_status, session_id):
 
     if session_id in pyplan_sessions and pyplan_sessions[session_id].is_ready():
         pyplan = pyplan_sessions[session_id]
 
-        ctx = dash.callback_context
-        if ctx.triggered:
-            # set selector value
-            input_id = ctx.triggered[0]['prop_id'].split('.')[0]
-            print(input_id)
-            if input_id=="discount_selector":
-                pyplan.setSelectorValue("discount_selector", discount_value)
-            elif input_id=="stock_policy_selector":
-                pyplan.setSelectorValue("stock_policy_selector", stock_value)   
-            elif input_id=="cost_sel_scenario":
-                pyplan.setSelectorValue("cost_sel_scenario", cost_value)
-
-
         # get values from Pyplan
-        df_json = pyplan.getResult('p_l_report')
+        df_json = pyplan.getResult('p_l_report_for_dash')
         df = pd.read_json(df_json, orient='table')
         sorted_values = df.index.get_level_values("Report index").unique().tolist()
         df = pd.pivot_table( df, values="value", index=["Report index"], columns=["time"], aggfunc="sum")
