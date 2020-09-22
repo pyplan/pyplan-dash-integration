@@ -8,6 +8,9 @@ Pyplan allows you to explore the underlaying model logic by single clicking a no
 
 You can also analyse its outputs as table and graph by double clicking a node to display its result.
 
+![App screenshot](screenshots/pyplan_dash_integration_640.png)
+
+
 ## Run it locally
 
 ### Requirements
