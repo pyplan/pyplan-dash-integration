@@ -2,7 +2,9 @@
 
 ## Overview
 
-TODO: doc overview
+This app is a Commercial, Operations and Financial Planning demo showcasing the integration of Pyplan with Dash. Select any scenario and check the results on the projected P&L Statement.
+Pyplan allows you to explore the underlaying model logic by single clicking a node in the diagram and selecting the 'Code' tab to inspect the Python code running underneath.
+You can also analyse its outputs as table and graph by double clicking a node to display its result.
 
 ## Run it locally
 
