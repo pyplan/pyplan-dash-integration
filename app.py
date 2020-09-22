@@ -67,13 +67,17 @@ def serve_layout():
             [
                 html.Div(
                     [
-                        html.H4("Financial Planning"),
-                        html.P("Profit and loss statement collect the impact of the previous simulated scenarios across the company and project it results for the following three years. The Net present value of Net Income is the single number that reflects cross impacts."),
+                        html.H4("Integrated Business Planning"),
+                        html.H5("Overview:"),
+                        html.P("This app is a Commercial, Operations and Financial Planning demo showcasing the integration of Pyplan with Dash. Select any scenario and check the results on the projected P&L Statement."),
+                        html.P("Pyplan allows you to explore the underlaying model logic by single clicking a node in the diagram and selecting the <Code> tab to inspect the Python code running underneath."),
+                        html.P("You can also analyse its outputs as table and graph by double clicking a node to display its result.")
+                          
                     ], className="twelve columns"),
             ], className="row title"),
         html.Div(
             [
-                html.Progress(id='progress', value=0, max=30,
+                html.Progress(id='progress', value='0', max=30,
                               style={"width": "100%"}),
                 
                 html.Div(
@@ -89,6 +93,9 @@ def serve_layout():
             ], className="row"),
         html.Div(
             [
+
+                html.H6("Scenario selector:"),
+
                 html.Div(
                     [
                         html.Div(
@@ -137,6 +144,9 @@ def serve_layout():
                             ], className="three columns box")
                     ])
             ], className="row"),
+
+        html.H6('Profit and Loss Statement:'),
+
         html.Div(
             [
                 dcc.Loading(
@@ -217,9 +227,9 @@ def update_pyplan_status(n_intervals, session_id):
 
         pyplan = pyplan_sessions[session_id]
         if pyplan.is_ready():
-            return html.Iframe(id="pyplan-ui", src=f"https://my.pyplan.org/#loginas/{pyplan.token}/{pyplan.session_key}", style={"height":"800px"}), True, 30, True
+            return html.Iframe(id="pyplan-ui", src=f"https://my.pyplan.org/#loginas/{pyplan.token}/{pyplan.session_key}", style={"height":"800px"}), True, '30', True
 
-    return dash.no_update, False, n_intervals+1, False
+    return dash.no_update, False, f'{n_intervals+1}', False
 
 
 
@@ -276,15 +286,20 @@ def selects_callback(node_status, discount_value, stock_value, cost_value, sessi
         # create columns for table
         columns = []
         for nn, col in enumerate(df.columns):
-            column_definition = {
-                "name": col,
-                "id": col,
-                "type": "text"
-            }
-            if nn > 0:
-                column_definition["type"] = "numeric"
-                column_definition["format"] = FormatTemplate.money(0)
-
+            column_definition = None
+            if nn==0:
+                column_definition = {
+                    "name": 'P&L Accounts',
+                    "id": 'Report index',
+                    "type": "text"
+                }
+            else:
+                column_definition = {
+                    "name": col,
+                    "id": col,
+                    "type": "numeric",
+                    "format": FormatTemplate.money(0)
+                }
             columns.append(column_definition)
 
         data = df.to_dict("records")
