@@ -9,4 +9,4 @@ COPY . code
 WORKDIR /code
 EXPOSE 9740
 
-CMD gunicorn --workers=2 -b 0.0.0.0:9740 app:server --access-logfile -
+CMD gunicorn --workers=1 -b 0.0.0.0:9740 app:server --access-logfile -

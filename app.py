@@ -21,6 +21,8 @@ pyplan_sessions = dict()
 
 def serve_layout():
     session_id = str(uuid.uuid4())
+    print(f"-------------------------------")
+    print(f"New session: {session_id}")
 
     return html.Div([
 
@@ -32,7 +34,7 @@ def serve_layout():
         ),
         dcc.Interval(
             id='result-check',
-            interval=4000,
+            interval=5000,
             n_intervals=0
         ),
         dcc.Store(id="node_status"),
@@ -161,16 +163,21 @@ app.layout = serve_layout
      State('session-id', 'children')]
 )
 def update_pyplan_status(n_intervals, session_id):
-    if n_intervals > 0:
+    
+    if n_intervals>0:
         if not session_id in pyplan_sessions:
             pyplan_sessions[session_id] = Pyplan("https://api.pyplan.org")
+            print(f"Local session created: {session_id}")
             pyplan_sessions[session_id].login(
                 "dash_user", "Afd.!4dFssw", 23)
+            print(f"Pyplan session created: {session_id}")
             pyplan_sessions[session_id].open_model(
                 "dash_integration/Public/getting started with planning dash demo.ppl")
+            print(f"The model is open for session: {session_id}")
 
         pyplan = pyplan_sessions[session_id]
         if pyplan.is_ready():
+            print(f"The UI is ready for session: {session_id}")
             return html.Iframe(id="pyplan-ui", src=f"https://my.pyplan.org/#loginas/{pyplan.token}/{pyplan.session_key}", style={"height":"800px"}), True, '30', True
 
     return dash.no_update, False, f'{n_intervals+1}', False
@@ -185,9 +192,10 @@ def update_pyplan_status(n_intervals, session_id):
 def check_pyplan_status(n_intervals, session_id):
     if session_id in pyplan_sessions and pyplan_sessions[session_id].is_ready():
         nodes_to_refresh = pyplan_sessions[session_id].getStatus(['p_l_report_for_dash'])
-        return [True if 'p_l_report_for_dash' in nodes_to_refresh else dash.no_update]
-    return [dash.no_update]
-
+        if 'p_l_report_for_dash' in nodes_to_refresh:
+            print(f"Need refresh for session: {session_id}")
+            return [True]
+    raise dash.exceptions.PreventUpdate()
 
 
 @app.callback(
@@ -203,6 +211,7 @@ def selects_callback(node_status, session_id):
         pyplan = pyplan_sessions[session_id]
 
         # get values from Pyplan
+        print(f"Get values from Pyplan for session: {session_id}")
         df_json = pyplan.getResult('p_l_report_for_dash')
         df = pd.read_json(df_json, orient='table')
         sorted_values = df.index.get_level_values("Report index").unique().tolist()
