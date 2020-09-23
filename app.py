@@ -69,10 +69,9 @@ def serve_layout():
                     [
                         html.H4("Integrated Business Planning"),
                         html.H5("Overview:"),
-                        html.P("This app is a Commercial, Operations and Financial Planning demo showcasing the integration of Pyplan with Dash. Select any scenario and check the results on the projected P&L Statement."),
-                        html.P("Pyplan allows you to explore the underlaying model logic by single clicking a node in the diagram and selecting the <Code> tab to inspect the Python code running underneath."),
-                        html.P("You can also analyse its outputs as table and graph by double clicking a node to display its result.")
-                          
+                        html.P("This app is a commercial, operations and financial planning demo showcasing the integration of Pyplan with Dash.  Open the Input Panel to change parameters, select scenarios and check the results on the projected P&L Statement."),
+                        html.P("Explore the underlaying model logic by single clicking a node in the diagram and selecting the Code</> tab to inspect the Python code calculating business planning outcomes."),
+                        html.P("Double click any node to run it an analyse its output as table and graph.")
                     ], className="twelve columns"),
             ], className="row title"),
         html.Div(
